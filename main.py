@@ -18,10 +18,11 @@ if img is None:
 flag = False
 ix = -1
 iy = -1
+draft = []
 
 def crop(event, x, y, flags, params):
 
-    global flag, ix, iy
+    global flag, ix, iy, draft
     
     if event == 1:
         flag = True
@@ -43,6 +44,7 @@ def crop(event, x, y, flags, params):
             cropped = img[min(iy, fy):max(iy, fy), min(ix, fx):max(ix, fx)]
             cv2.imshow("new_window", cropped)
             cv2.waitKey(1)
+            draft.append(cropped)
         else:
             print("No region selected")
 
@@ -57,5 +59,14 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('x'):
         break
 
-    cv2.waitKey(1)
+cv2.destroyAllWindows()
+
+for pics, imgs in enumerate(draft):
+    cv2.imshow(f"crop{pics}", imgs)
+cv2.waitKey(0)
+try:
+    save = int(input("Which picture do you want to save?"))
+    cv2.imwrite("cropped.jpg", draft[save])
+except (TypeError, ValueError, IndexError):
+    print("Please enter a valid number")
 cv2.destroyAllWindows()
