@@ -32,6 +32,9 @@ def crop(event, x, y, flags, params):
     elif event == 0:
         if flag == True:
             temp_img = img.copy()
+            width = abs(x - ix)
+            height = abs(y - iy)
+            cv2.setWindowTitle("window", f"{height}x{width}")
             cv2.rectangle(temp_img, pt1 = (ix, iy), pt2 = (x, y), thickness = 3, color = (0, 255, 0))
             cv2.imshow("window", temp_img)
 
@@ -66,7 +69,8 @@ for pics, imgs in enumerate(draft):
 cv2.waitKey(0)
 try:
     save = int(input("Which picture do you want to save?"))
-    cv2.imwrite("cropped.jpg", draft[save])
+    name = input("What should be the name of your save file?")
+    cv2.imwrite(name+".jpg", draft[save])
 except (TypeError, ValueError, IndexError):
     print("Please enter a valid number")
 cv2.destroyAllWindows()
